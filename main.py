@@ -108,7 +108,7 @@ def update(frame):
     axis_2.set_xlim(0, 15)
     axis_2.set_ylim(0, 0.5)
     axis_2.set_xlabel('$v$ (m/s)', fontsize=15)
-    axis_2.set_ylabel('frequency', fontsize=15)
+    axis_2.set_ylabel('fréquence', fontsize=15)
     axis_2.set_title('Distribution des vitesses', fontsize=15)
     axis_2.plot(v,f, label = 'Distribution Maxwell-Boltzmann')
     axis_2.legend(fontsize=15)
