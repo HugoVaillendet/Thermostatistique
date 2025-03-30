@@ -4,13 +4,13 @@ from matplotlib.animation import FuncAnimation
 
 #On définit les paramètres de la simulation
 
-N=200 #Nombre de particules
+N=100 #Nombre de particules
 mass=1 #Masse des particules
 radius=0.1 #rayon des particules
-L=15 #Longueur de la boite
-v_0=3 #Norme des vitesses initiales
-duration=14 #Durée de la simulation
-dt=0.03 #Intervale de temps
+L=20 #Longueur de la boite
+v_0=2 #Norme des vitesses initiales
+duration=10 #Durée de la simulation
+dt=0.01 #Intervale de temps
 steps=int(duration/dt) #Nombre de pas
 
 #La fonction meshCreation crée un réseau régulier de particules dans la boit de longueur L.
@@ -117,18 +117,18 @@ def update(frame):
 
 
 def MaxwellBoltzmann(v_0, mass,v):
-    E_c_avrg=0.5*mass*(v_0**2)
-    TkB=E_c_avrg
+    E_c_avrg=0.5*mass*(v_0**2) #Energie cinétique moyenne
+    TkB=E_c_avrg 
     sigma=TkB/mass
-    f=(v/sigma)*np.exp(-((v**2)/(2*sigma)))
+    f=(v/sigma)*np.exp(-v**2/(2*sigma)) #Distribution des vitesses
     return f
 
 particles_position=meshCreation(N, L, radius) #On initialise le réseau de particules.
 
 particle_velocity=velocityInit(N) #On initialise les vitesses des particules du réseau.
 
-v=np.linspace(0, 30, 500)
-f=MaxwellBoltzmann(v_0, mass,v) #
+v=np.linspace(0, 30, 600) #On initialize l'array des vitesses
+f=MaxwellBoltzmann(v_0, mass, v) #On calcule la distribution Maxwell-Boltzmann
 
 #On affiche le réseau de particules :
 fig=plt.figure()
