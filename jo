@@ -1,0 +1,51 @@
+mport numpy as np
+import matplotlib.pyplot as plt
+
+N = 20 #nombre de particules
+R = 0.5  
+L = 10  
+dt = 0.01  
+T_max = 10 #temps total
+
+v0 = 1
+
+positions = np.random.rand(N, 2) * (L - 2 * R) + R
+tableau = np.random.uniform(0, 2 * np.pi, N)
+vitesses = np.empty((N, 2))
+vitesses[:, 0] = v0 * np.cos(tableau)
+vitesses[:, 1] = v0 * np.sin(tableau)
+
+def collision_parois(pos, vit):
+    for i in range(N):
+        if pos[i, 0] <= R or pos[i, 0] >= L - R:
+            vit[i, 0] = vit[i, 0] * -1  
+        if pos[i, 1] <= R or pos[i, 1] >= L - R:
+            vit[i, 1] *= -1  
+    return pos, vit 
+
+def collision_particules(pos, vit):
+    for i in range(N):
+        for j in range(i + 1, N):
+            dist = np.linalg.norm(pos[i] - pos[j])
+            if dist < 2 * R:
+                dp = pos[j] - pos[i]
+                dv = vit[j] - vit[i]
+                dp_norm = dp / dist
+                v_rel = np.dot(dv, dp_norm)
+                if v_rel < 0:
+                    vit[i] += v_rel * dp_norm
+                    vit[j] -= v_rel * dp_norm
+    return vit
+
+for t in np.arange(0, T_max, dt):
+    positions = positions + vitesses * dt
+    positions, vitesses = collision_parois(positions, vitesses)
+    plt.clf() 
+    plt.xlim(0, L)
+    plt.ylim(0, L)
+    plt.axis('scaled')  #boité carré
+    for i in range(N):
+        cercle = plt.Circle(positions[i], R, color="magenta")
+        plt.gca().add_patch(cercle)
+    plt.pause(0.01)
+plt.show()
